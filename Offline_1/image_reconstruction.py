@@ -7,26 +7,27 @@ def low_rank_approximation(A, k):
     A_k = U[:, :k] @ np.diag(S[:k]) @ V[:k, :]
     return A_k
 
-# Read the image and convert it to grayscale
-image = cv2.imread('image.jpg')
-gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+image_path = "/home/ababil/BUET/4-2/CSE472/CSE472_MachineLearning/Offline_1/image.jpg"
+image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+plt.imshow(image, cmap='gray')
+plt.axis('off')
+# plt.show()
 
-# Resize the image to lower dimensions
-resized_image = cv2.resize(gray_image, (500, 500))
+# print(image.shape)
+# print(min(image.shape))
 
-# Perform Singular Value Decomposition
-k_values = np.linspace(1, min(resized_image.shape), num=10, dtype=int)
+A = image
+
+k_values = [1, 5, 10, 20, 25, 30, 35, 40, 50, 100, 200, min(image.shape)] # 12 values of n_components
 approximations = []
 for k in k_values:
-    approximation = low_rank_approximation(resized_image, k)
+    approximation = low_rank_approximation(A, k)
     approximations.append(approximation)
 
-# Plot the resultant k-rank approximations
-fig, axes = plt.subplots(2, 5, figsize=(12, 6))
+fig, axes = plt.subplots(3, 4, figsize=(20, 12))
 for i, ax in enumerate(axes.flat):
     ax.imshow(approximations[i], cmap='gray')
     ax.set_title(f'k = {k_values[i]}')
     ax.axis('off')
-
 plt.tight_layout()
 plt.show()
