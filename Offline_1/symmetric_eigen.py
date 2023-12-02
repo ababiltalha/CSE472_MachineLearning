@@ -9,7 +9,7 @@ while np.linalg.matrix_rank(A) != n:
     A = (A + A.T) 
 print(f"Matrix A:\n{A}")
 
-eigenvalues, eigenvectors = np.linalg.eig(A)
+eigenvalues, eigenvectors = np.linalg.eigh(A)
 print(f"Eigenvalues:\n{eigenvalues}")
 print(f"Eigenvectors:\n{eigenvectors}")
 
