@@ -32,10 +32,10 @@ class LogisticRegressionWeakLearning:
             
             loss = self.loss(y_predicted, y)
             if (epoch - 99) % 100 == 0:
-                print(f"Loss at epoch {epoch}: {loss}")
-                print(learning_rate)
+                print(f"Loss at epoch {epoch}: \t{loss}")
+                # print(learning_rate)
             if loss < early_stopping_threshold:
-                print(f"Loss at epoch {epoch}: {loss}")
+                print(f"Loss at epoch {epoch}: \t{loss}")
                 break
             
             if decaying_learning_rate:
@@ -101,4 +101,50 @@ class LogisticRegressionWeakLearning:
         for col in X.columns.values:
             information_gain.append(self.calculate_information_gain(X[col], y))
         
+class Adaboost:
+    def __init__(self, num_iterations=10):
+        self.num_iterations = num_iterations
+        self.hypotheses = []
+        self.z = []
+        
+    def adaboost(self, X, y, K):
+        w = np.ones(len(X)) / len(X)
+        
+        for k in range(K):
+            # resample the data
+            X, y, w = self.resample(X, y, w)
+            
+            # train a weak learner
+            model = LogisticRegressionWeakLearning()
+            model.fit(X, y, k)
+            self.hypotheses.append(model)
+            
+            # calculate error
+            y_pred = model.predict(X)
+            error = np.sum(w * (y_pred != y))
+            if error == 0:
+                # print("Error is 0")
+                error = 1e-15
+            if error > 0.5:
+                # print("Error is greater than 0.5")
+                self.z.append(0)
+                continue
+            
+            # update weights
+            for i in range(len(w)):
+                if y_pred[i] == y[i]:
+                    w[i] *= error / (1 - error)
+                    
+            # normalize weights
+            w /= np.sum(w)
+            
+            # calculate weak learner weight
+            weak_learner_weight = np.log((1 - error) / error)
+            self.z.append(weak_learner_weight)
+        
+        print(len(self.z))
+        print(len(self.hypotheses))
+        
     
+            
+            

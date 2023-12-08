@@ -1,0 +1,69 @@
+
+Dataset:  telco
+Preprocessing Telco Churn Data...
+Training Set Metrics:
+Accuracy:  0.7900248491302805
+Test Set Metrics:
+Accuracy:  0.7828246983676366
+
+Training Set Metrics:
+Accuracy:  0.7816826411075612
+Test Set Metrics:
+Accuracy:  0.7750177430801988
+
+Training Set Metrics:
+Accuracy:  0.7680156194533191
+Test Set Metrics:
+Accuracy:  0.7665010645848119
+
+Training Set Metrics:
+Accuracy:  0.7768903088391906
+Test Set Metrics:
+Accuracy:  0.7792760823278921
+
+
+Dataset:  credit
+Preprocessing Credit Card Fraud Data...
+Training Set Metrics:
+Accuracy:  0.9949978649423534
+Test Set Metrics:
+Accuracy:  0.995608685045133
+
+Training Set Metrics:
+Accuracy:  0.9816995058866589
+Test Set Metrics:
+Accuracy:  0.9756038058062942
+
+Training Set Metrics:
+Accuracy:  0.9317391569572379
+Test Set Metrics:
+Accuracy:  0.9233959502317638
+
+Training Set Metrics:
+Accuracy:  0.9404623924845971
+Test Set Metrics:
+Accuracy:  0.932666504025372
+
+
+Dataset:  adult
+Preprocessing Adult Data...
+Training Set Metrics:
+Accuracy:  0.814468536569193
+Test Set Metrics:
+Accuracy:  0.8158034528552457
+
+Training Set Metrics:
+Accuracy:  0.8061468072408992
+Test Set Metrics:
+Accuracy:  0.8090969455511288
+
+Training Set Metrics:
+Accuracy:  0.8049864067369538
+Test Set Metrics:
+Accuracy:  0.80398406374502
+
+Training Set Metrics:
+Accuracy:  0.8119156554605133
+Test Set Metrics:
+Accuracy:  0.8079681274900399
+

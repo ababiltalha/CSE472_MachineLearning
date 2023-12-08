@@ -1,0 +1,72 @@
+
+Dataset:  telco
+Preprocessing Telco Churn Data...
+Train Set Size:  5634
+Test Set Size:  1409
+Number of Features:  40
+Number of Positive Labels:  1495
+Number of Negative Labels:  4139
+
+Training Set Metrics:
+Accuracy: 	 0.7649982250621228
+Recall: 	 0.16387959866220736
+Specificity: 	 0.9821212853346218
+Precision: 	 0.768025078369906
+FDR: 		 0.23197492163009403
+F1 Score: 	 0.2701212789415656
+Test Set Metrics:
+Accuracy: 	 0.765791341376863
+Recall: 	 0.16844919786096257
+Specificity: 	 0.9816425120772947
+Precision: 	 0.7682926829268293
+FDR: 		 0.23170731707317074
+F1 Score: 	 0.27631578947368424
+
+
+Dataset:  credit
+Preprocessing Credit Card Fraud Data...
+Train Set Size:  16393
+Test Set Size:  4099
+Number of Features:  29
+Number of Positive Labels:  394
+Number of Negative Labels:  15999
+
+Training Set Metrics:
+Accuracy: 	 0.994936863295309
+Recall: 	 0.8020304568527918
+Specificity: 	 0.9996874804675292
+Precision: 	 0.9844236760124611
+FDR: 		 0.01557632398753894
+F1 Score: 	 0.8839160839160839
+Test Set Metrics:
+Accuracy: 	 0.9948767992193218
+Recall: 	 0.7959183673469388
+Specificity: 	 0.9997500624843789
+Precision: 	 0.9873417721518988
+FDR: 		 0.012658227848101266
+F1 Score: 	 0.8813559322033897
+
+
+Dataset:  adult
+Preprocessing Adult Data...
+Train Set Size:  30162
+Test Set Size:  15060
+Number of Features:  103
+Number of Positive Labels:  7508
+Number of Negative Labels:  22654
+
+Training Set Metrics:
+Accuracy: 	 0.7789271268483522
+Recall: 	 0.1449120937666489
+Specificity: 	 0.9890527059238986
+Precision: 	 0.8143712574850299
+FDR: 		 0.18562874251497005
+F1 Score: 	 0.2460425146992311
+Test Set Metrics:
+Accuracy: 	 0.7809428950863214
+Recall: 	 0.13945945945945945
+Specificity: 	 0.9898767605633803
+Precision: 	 0.8177496038034865
+FDR: 		 0.18225039619651348
+F1 Score: 	 0.2382821519279612
+
