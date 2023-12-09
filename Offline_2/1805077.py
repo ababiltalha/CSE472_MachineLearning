@@ -12,14 +12,12 @@ adult = "adult/adult.data"
 adult_test = "adult/adult.test"
 
 class LogisticRegressionWeakLearning:
-    def __init__(self, learning_rate=0.01, iterations=1000):
-        self.learning_rate = learning_rate
-        self.num_iterations = iterations
+    def __init__(self):
         self.weights = None
         self.bias = None
         self.selected_features = []
         
-    def fit(self, X, y, k=0, early_stopping_threshold=0.5 ,decaying_learning_rate=False):
+    def fit(self, X, y, k=0, max_epochs=5000, early_stopping_threshold=0.5, learning_rate=0.1, decaying_learning_rate=False):
         X, self.selected_features = self.feature_selection(X, y, k)
         
         # row means number of samples, column means number of features
@@ -27,11 +25,9 @@ class LogisticRegressionWeakLearning:
         self.weights = np.zeros(num_features)
         self.bias = 0 #w0
         
-        self.gradient_descent(X, y, num_samples, early_stopping_threshold, decaying_learning_rate)
+        initial_learning_rate = learning_rate
         
-    def gradient_descent(self, X, y, num_samples, early_stopping_threshold=0.5 ,decaying_learning_rate=False):
-        learning_rate = self.learning_rate
-        for epoch in range(self.num_iterations):
+        for epoch in range(max_epochs):
             y_predicted = self.sigmoid(np.dot(X, self.weights) + self.bias)
             
             dw = (1 / num_samples) * np.dot(X.T, (y_predicted - y))
@@ -50,9 +46,13 @@ class LogisticRegressionWeakLearning:
             
             if decaying_learning_rate:
                 # inverse time decay
-                learning_rate = self.learning_rate / (1 + epoch * self.learning_rate)
+                learning_rate = initial_learning_rate / (1 + epoch * initial_learning_rate)
             
     def predict(self, X):
+        # print weights and bias
+        # print("Weights: ", self.weights)
+        # print("Bias: ", self.bias)
+        
         # predict on the selected features
         X = X[self.selected_features]
         y_predicted = self.sigmoid(np.dot(X, self.weights) + self.bias)
@@ -150,23 +150,24 @@ class LogisticRegressionWeakLearning:
         return X[selected_features], selected_features
         
 class AdaBoost:
-    def __init__(self, num_iterations=10):
-        self.num_iterations = num_iterations
+    def __init__(self):
         self.hypotheses = []
         self.z = []
         
-    def adaBoost(self, X, y, K, k = 0, early_stopping_threshold=0.5 ,decaying_learning_rate=True):
+    def adaBoost(self, X, y, K, k=0, max_epochs=5000, early_stopping_threshold=0.5, learning_rate=0.1, decaying_learning_rate=False):
         w = np.ones(len(X)) / len(X)
         
         while True:
             # resample the data
-            indices = np.random.choice(len(X), len(X), p=w)
+            # set seed for random choice
+            np.random.seed(77)
+            indices = np.random.choice(len(X), len(X), p=w, replace=True)
             X = X.iloc[indices]
             y = y.iloc[indices]
                         
             # train a weak learner
             model = LogisticRegressionWeakLearning()
-            model.fit(X, y, k, early_stopping_threshold, decaying_learning_rate)
+            model.fit(X, y, k, max_epochs, early_stopping_threshold, learning_rate, decaying_learning_rate)
             # self.hypotheses.append(model)
             
             # calculate error
@@ -198,7 +199,7 @@ class AdaBoost:
         # normalize the weights
         self.z /= np.sum(self.z)
         
-    def weighted_majority_vote(self, X_test, y_test):
+    def weighted_majority_vote(self, X_test):
         # print(self.z)
         y_pred = np.zeros(len(X_test))
         for i in range(len(self.hypotheses)):
@@ -275,7 +276,7 @@ def preprocessAndSplit(dataset):
         # drop Time
         df.drop(['Time'], axis=1, inplace=True)
         
-        df = pd.concat([df[df['Class']==1], df[df['Class']==0].sample(n=20000)]).sample(frac=1)
+        df = pd.concat([df[df['Class']==1], df[df['Class']==0].sample(n=20000, random_state=77)]).sample(frac=1, random_state=77)
         # df.info()
         
         # split into features and labels
@@ -345,7 +346,13 @@ def preprocessAndSplit(dataset):
                 
         return X_train, X_test, y_train, y_test
     
-def weakLearningStats(datasets):
+def logisticRegressionStats(datasets, 
+                            k = 20, 
+                            max_epochs = 5000,
+                            early_stopping_threshold = 0, 
+                            learning_rate = 0.01,
+                            decaying_learning_rate = False
+                            ):
     for dataset in datasets:
         print("\nDataset: ", dataset)
         X_train, X_test, y_train, y_test = preprocessAndSplit(dataset)
@@ -360,10 +367,12 @@ def weakLearningStats(datasets):
         model.fit(
             X_train, 
             y_train, 
-            k = 30, 
-            early_stopping_threshold=0.5, 
-            decaying_learning_rate=True
-            )
+            k, 
+            max_epochs,
+            early_stopping_threshold, 
+            learning_rate,
+            decaying_learning_rate
+        )
         y_pred_train = model.predict(X_train)
         print("Training Set Metrics:")
         model.print_metrics(y_train, y_pred_train)
@@ -372,33 +381,63 @@ def weakLearningStats(datasets):
         model.print_metrics(y_test, y_pred)
         print()
         
-def adaBoostStats(datasets):
+def adaBoostStats(datasets, 
+                    K_list = [ 5, 10, 15, 20 ],
+                    k = 20, 
+                    max_epochs = 1000,
+                    early_stopping_threshold = 0.5, 
+                    learning_rate = 0.01,
+                    decaying_learning_rate = False
+                ):
     for dataset in datasets:
         print("\nDataset: ", dataset)
         X_train, X_test, y_train, y_test = preprocessAndSplit(dataset)
         
-        for K in [ 5, 10, 15, 20 ]:
+        for K in K_list:
             adaBoost = AdaBoost()
             adaBoost.adaBoost(
                 X_train, 
                 y_train, 
                 K, 
-                k=30, 
-                early_stopping_threshold=0.5, 
-                decaying_learning_rate=True
-                )
-            y_pred_train = adaBoost.weighted_majority_vote(X_train, y_train)
+                k, 
+                max_epochs,
+                early_stopping_threshold, 
+                learning_rate,
+                decaying_learning_rate
+            )
+            y_pred_train = adaBoost.weighted_majority_vote(X_train)
             print("Training Set Metrics:")
             adaBoost.print_accuracy(y_train, y_pred_train)
             print("Test Set Metrics:")
-            y_pred = adaBoost.weighted_majority_vote(X_test, y_test)
+            y_pred = adaBoost.weighted_majority_vote(X_test)
             adaBoost.print_accuracy(y_test, y_pred)
             print()
 
 def main():
     datasets = [ 'telco', 'credit', 'adult' ]
-    # weakLearningStats(datasets)
+    
+    # run logistic regression on all datasets with 
+    # k = 20, max_epochs=5000, early_stopping_threshold=0, learning_rate=0.01
+    # logisticRegressionStats(datasets)
+    
+    # run adaboost on all datasets with
+    # K = 5, 10, 15, 20, k = 20, max_epochs=1000, early_stopping_threshold=0.5, learning_rate=0.01
     adaBoostStats(datasets)
+    
+    # uncomment the line with the dataset name to run on a single dataset
+    # datasets = [ 'telco' ]
+    # datasets = [ 'credit' ]
+    # datasets = [ 'adult' ]
+    
+    # run logistic regression on single dataset with
+    # custom hyperparameters
+    # logisticRegressionStats(datasets, k=20, max_epochs=5000, early_stopping_threshold=0.5, learning_rate=0.1, decaying_learning_rate=False)
+                            
+    
+    # run adaboost on single dataset with
+    # custom hyperparameters
+    # adaBoostStats(datasets, K_list=[10] ,k=20, max_epochs=1000, early_stopping_threshold=0.5, learning_rate=0.1, decaying_learning_rate=False)
+                    
     
 if __name__ == "__main__":
     main()

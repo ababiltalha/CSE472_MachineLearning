@@ -2,68 +2,68 @@
 Dataset:  telco
 Preprocessing Telco Churn Data...
 Training Set Metrics:
-Accuracy:  0.7900248491302805
+Accuracy:  0.792332268370607
 Test Set Metrics:
-Accuracy:  0.7828246983676366
+Accuracy:  0.7977288857345636
 
 Training Set Metrics:
-Accuracy:  0.7816826411075612
+Accuracy:  0.7754703585374512
 Test Set Metrics:
-Accuracy:  0.7750177430801988
+Accuracy:  0.7913413768630234
 
 Training Set Metrics:
-Accuracy:  0.7680156194533191
+Accuracy:  0.77209797657082
 Test Set Metrics:
-Accuracy:  0.7665010645848119
+Accuracy:  0.7913413768630234
 
 Training Set Metrics:
-Accuracy:  0.7768903088391906
+Accuracy:  0.7669506567270146
 Test Set Metrics:
-Accuracy:  0.7792760823278921
+Accuracy:  0.7806955287437899
 
 
 Dataset:  credit
 Preprocessing Credit Card Fraud Data...
 Training Set Metrics:
-Accuracy:  0.9949978649423534
+Accuracy:  0.9941438418837308
 Test Set Metrics:
-Accuracy:  0.995608685045133
+Accuracy:  0.9975603805806295
 
 Training Set Metrics:
-Accuracy:  0.9816995058866589
+Accuracy:  0.9697431830659428
 Test Set Metrics:
-Accuracy:  0.9756038058062942
+Accuracy:  0.9731641863869236
 
 Training Set Metrics:
-Accuracy:  0.9317391569572379
+Accuracy:  0.9164277435490759
 Test Set Metrics:
-Accuracy:  0.9233959502317638
+Accuracy:  0.9119297389607222
 
 Training Set Metrics:
-Accuracy:  0.9404623924845971
+Accuracy:  0.863905325443787
 Test Set Metrics:
-Accuracy:  0.932666504025372
+Accuracy:  0.8665528177604294
 
 
 Dataset:  adult
 Preprocessing Adult Data...
 Training Set Metrics:
-Accuracy:  0.814468536569193
+Accuracy:  0.8268350905112393
 Test Set Metrics:
-Accuracy:  0.8158034528552457
+Accuracy:  0.8275564409030545
 
 Training Set Metrics:
-Accuracy:  0.8061468072408992
+Accuracy:  0.8233538889994032
 Test Set Metrics:
-Accuracy:  0.8090969455511288
+Accuracy:  0.8214475431606906
 
 Training Set Metrics:
-Accuracy:  0.8049864067369538
+Accuracy:  0.8271666335123665
 Test Set Metrics:
-Accuracy:  0.80398406374502
+Accuracy:  0.8262284196547145
 
 Training Set Metrics:
-Accuracy:  0.8119156554605133
+Accuracy:  0.8301836748226245
 Test Set Metrics:
-Accuracy:  0.8079681274900399
+Accuracy:  0.8275564409030545
 
