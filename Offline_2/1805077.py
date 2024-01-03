@@ -5,7 +5,7 @@ from scipy import stats
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-datadir = "/home/ababil/BUET/4-2/CSE472/Datasets/"
+datadir = "./"
 telco = "WA_Fn-UseC_-Telco-Customer-Churn.csv"
 credit = "creditcard.csv"
 adult = "adult/adult.data"
@@ -418,11 +418,11 @@ def main():
     
     # run logistic regression on all datasets with 
     # k = 20, max_epochs=5000, early_stopping_threshold=0, learning_rate=0.01
-    # logisticRegressionStats(datasets)
+    logisticRegressionStats(datasets)
     
     # run adaboost on all datasets with
     # K = 5, 10, 15, 20, k = 20, max_epochs=1000, early_stopping_threshold=0.5, learning_rate=0.01
-    adaBoostStats(datasets)
+    # adaBoostStats(datasets)
     
     # uncomment the line with the dataset name to run on a single dataset
     # datasets = [ 'telco' ]
@@ -431,12 +431,12 @@ def main():
     
     # run logistic regression on single dataset with
     # custom hyperparameters
-    # logisticRegressionStats(datasets, k=20, max_epochs=5000, early_stopping_threshold=0.5, learning_rate=0.1, decaying_learning_rate=False)
+    # logisticRegressionStats(datasets, k=20, max_epochs=5000, early_stopping_threshold=0, learning_rate=0.1, decaying_learning_rate=False)
                             
     
     # run adaboost on single dataset with
     # custom hyperparameters
-    # adaBoostStats(datasets, K_list=[10] ,k=20, max_epochs=1000, early_stopping_threshold=0.5, learning_rate=0.1, decaying_learning_rate=False)
+    # adaBoostStats(datasets, K_list=[10], k=20, max_epochs=1000, early_stopping_threshold=0.5, learning_rate=0.1, decaying_learning_rate=False)
                     
     
 if __name__ == "__main__":
