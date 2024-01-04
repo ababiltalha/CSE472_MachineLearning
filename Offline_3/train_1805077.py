@@ -7,9 +7,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
-import gc
 from tqdm import tqdm
 import pickle
+# import gc
 
 epsilon = 1e-15
 np.random.seed(77)
@@ -105,7 +105,6 @@ class AdamOptimizer(Optimizer):
         weights -= learning_rate * mw_hat / (np.sqrt(vw_hat) + self.epsilon)
         biases -= learning_rate * mb_hat / (np.sqrt(vb_hat) + self.epsilon)
         
-
 class DenseLayer(BaseLayer):
     def __init__(self, input_size, output_size, initializer=xavier_init, optimizer=AdamOptimizer):
         self.input_size = input_size
@@ -189,8 +188,7 @@ class Softmax(ActivationLayer):
     def return_ones(self, x):
         return np.ones(x.shape)
 
-class DropoutLayer(BaseLayer):
-    
+class DropoutLayer(BaseLayer):    
     def __init__(self, dropout_prob):
         self.dropout = dropout_prob
         self.mask = None
@@ -288,7 +286,6 @@ class NeuralNetwork:
             #     f.write("Epoch: " + str(epoch+1) + "\n")
             #     f.write("Loss: " + str(epoch_loss[-1]) + " Val loss: " + str(epoch_val_loss[-1]) + " Train acc: " + str(epoch_accuracy[-1]) + " Val acc: " + str(epoch_val_accuracy[-1]) + " Val F1: " + str(epoch_val_f1[-1]) + "\n")
             
-            gc.collect() if epoch % 5 == 0 else None
         # print(len(epoch_loss), len(epoch_val_loss), len(epoch_accuracy), len(epoch_val_accuracy), len(epoch_val_f1))    
         return epoch_loss, epoch_val_loss, epoch_accuracy, epoch_val_accuracy, epoch_val_f1
     
@@ -326,15 +323,21 @@ class NeuralNetwork:
         plt.plot(epoch_loss, label="Train loss")
         plt.plot(epoch_val_loss, label="Validation loss")
         plt.legend()
+        plt.xlabel("Epochs")
+        plt.ylabel("Loss")
         plt.savefig("loss_1805077.png")
         plt.clf()
         plt.plot(epoch_accuracy, label="Train accuracy")
         plt.plot(epoch_val_accuracy, label="Validation accuracy")
         plt.legend()
+        plt.xlabel("Epochs")
+        plt.ylabel("Accuracy")
         plt.savefig("accuracy_1805077.png")
         plt.clf()
         plt.plot(epoch_val_f1, label="Validation F1 score")
         plt.legend()
+        plt.xlabel("Epochs")
+        plt.ylabel("Macro-F1")
         plt.savefig("f1_1805077.png")
         plt.clf()
         return
@@ -356,7 +359,8 @@ class NeuralNetwork:
     
     def save_model(self):
         self.clean_model()
-        with open("model_1805077.pkl", "wb") as f:
+        # with open("model_1805077.pkl", "wb") as f:
+        with open("model.pkl", "wb") as f:
             pickle.dump(self, f)
 
 
@@ -376,30 +380,73 @@ if __name__ == "__main__":
     # print("X_test shape: ", X_test.shape)
     # print("y_test shape: ", y_test.shape)
     
+    # Hyperparameters    
+    learning_rates = [5e-3, 1e-3, 5e-4, 1e-4]
+    epochs = 25
+    learning_rate = learning_rates[2]
+    batch_size = 256
+    
+    # reported models
+    
+    # model 1
     nn = NeuralNetwork([
-        DenseLayer(784, 128),
+        DenseLayer(784, 512),
         ReLU(),
         DropoutLayer(0.5),
+        DenseLayer(512, 128),
+        ReLU(),
+        DropoutLayer(0.25),
         DenseLayer(128, 64),
         ReLU(),
         DenseLayer(64, 26),
         Softmax()
     ])
     
+    # model 2
+    # nn = NeuralNetwork([
+    #     DenseLayer(784, 128),
+    #     ReLU(),
+    #     DropoutLayer(0.5),
+    #     DenseLayer(128, 32),
+    #     ReLU(),
+    #     DenseLayer(32, 26),
+    #     Softmax()
+    # ])
+    
+    # model 3
+    # nn = NeuralNetwork([
+    #     DenseLayer(784, 128),
+    #     ReLU(),
+    #     DropoutLayer(0.5),
+    #     DenseLayer(128, 128),
+    #     ReLU(),
+    #     DropoutLayer(0.5),
+    #     DenseLayer(128, 64),
+    #     ReLU(),
+    #     DropoutLayer(0.5),
+    #     DenseLayer(64, 26),
+    #     Softmax()
+    # ])
+    
     epoch_loss, epoch_val_loss, epoch_accuracy, epoch_val_accuracy, epoch_val_f1 = nn.fit(CrossEntropyLoss(), 
                                                                                           X_train, 
                                                                                           y_train, 
                                                                                           X_val, 
                                                                                           y_val, 
-                                                                                          epochs=20, 
-                                                                                          learning_rate=5e-3, 
-                                                                                          batch_size=128)
+                                                                                          epochs, 
+                                                                                          learning_rate, 
+                                                                                          batch_size)
     nn.save_graphs(epoch_loss, epoch_val_loss, epoch_accuracy, epoch_val_accuracy, epoch_val_f1)
+    with open("metric.txt", "w") as f:
+        f.write("Training Accuracy: " + str(epoch_accuracy[-1]) + "\n")
+        f.write("Validation Accuracy: " + str(epoch_val_accuracy[-1]) + "\n")
+        f.write("Validation F1 score: " + str(epoch_val_f1[-1]) + "\n")
     
-    accuracy_score, f1_score = nn.evaluate(X_test, y_test)
-    nn.save_confusion_matrix(X_test, y_test)
-    print("Test Accuracy score: ", accuracy_score)
-    print("Test F1 score: ", f1_score)
+    # accuracy_score, f1_score = nn.evaluate(X_test, y_test)
+    # nn.save_confusion_matrix(X_test, y_test)
+    # with open("metric.txt", "a") as f:
+    #     f.write("Test Accuracy: " + str(accuracy_score) + "\n")
+    #     f.write("Test F1 score: " + str(f1_score) + "\n")
     
     nn.save_model()
     

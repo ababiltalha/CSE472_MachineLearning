@@ -1,0 +1,5 @@
+Training Accuracy: 0.9429487179487179
+Validation Accuracy: 0.9194978632478632
+Validation F1 score: 0.9187430319379778
+Test Accuracy score: 0.9152403846153846
+Test F1 score: 0.9148286294239791
