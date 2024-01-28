@@ -40,10 +40,6 @@ def PCAnD(D, n):
 def Gaussian(X, mu, sigma):
     N, M = X.shape
     X = X - mu
-    detSigma = np.linalg.det(sigma)
-    denom = np.sqrt((2 * np.pi) ** M * np.linalg.det(sigma))
-    invSigma = np.linalg.inv(sigma)
-    numer = np.exp(-0.5 * np.sum(X @ np.linalg.inv(sigma) * X, axis=1))
     probability = (1 / (np.sqrt((2 * np.pi) ** M * np.linalg.det(sigma)) + 1e-6)) * np.exp(-0.5 * np.sum(X @ np.linalg.inv(sigma) * X, axis=1))
     return probability
 
@@ -135,7 +131,7 @@ class GaussianMixtureModel:
     
     
 def saveImages():
-    for i in [3]: #range(4):
+    for i in range(4):
         dataset = i
         D = importData(dataset)
         N, M = D.shape
@@ -194,5 +190,5 @@ def main():
     
     
 if __name__ == "__main__":
-    saveImages()
-    # main()
+    # saveImages()
+    main()
