@@ -115,7 +115,7 @@ class GaussianMixtureModel:
         N, M = D.shape
         pik = np.zeros((N, self.numComponents))
         for i in range(self.numComponents):
-            pik[:, i] = self.w[i] * Gaussian(D, self.mu[i], self.sigma[i])
+            pik[:, i] = self.w[i] * Gaussian(D, self.mu[i], self.sigma[i] + np.eye(M) * 1e-6)
         return pik
     
     # Bonus
@@ -135,7 +135,7 @@ class GaussianMixtureModel:
     
     
 def saveImages():
-    for i in range(4):
+    for i in [3]: #range(4):
         dataset = i
         D = importData(dataset)
         N, M = D.shape
